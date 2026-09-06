@@ -183,9 +183,11 @@ book: check-split check-thebe-fork wheels vendor-thebe vendor-pyodide
 	PIP_DISABLE_PIP_VERSION_CHECK=1 ICM_BOOK_BUILD=1 jupyter-book build content/ \
 		--path-output "$(CURDIR)" --config "$(CURDIR)/_config.yml" --toc "$(CURDIR)/_toc.yml"
 	@# Sphinx doesn't track files referenced by raw <img>/<audio>/<video>
-	@# HTML tags, so copy each chapter's assets and pre-rendered anim clips
+	@# HTML tags, so copy each chapter's assets, the pre-rendered anim clips,
+	@# and the course sections' verbatim static/ trees (example submissions —
+	@# audio, src/, write-ups — that pages link to with plain relative URLs)
 	@# into the build output ourselves (dest drops the content/ prefix).
-	@for d in content/book/ch*/assets content/book/ch*/anim content/templates/template-animation/anim; do \
+	@for d in content/book/ch*/assets content/book/ch*/anim content/templates/template-animation/anim content/course/*/static; do \
 		[ -d "$$d" ] || continue; \
 		dest="_build/html/$$(dirname "$${d#content/}")"; \
 		mkdir -p "$$dest"; \
